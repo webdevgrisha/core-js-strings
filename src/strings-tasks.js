@@ -238,7 +238,10 @@ function endsWith(str, substr) {
  */
 function formatTime(minutes, seconds) {
   // eslint-disable-next-line prettier/prettier
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+    2,
+    '0'
+  )}`;
 }
 
 /**
@@ -300,8 +303,29 @@ function containsSubstring(str, substring) {
  *   countVowels('aEiOu') => 5
  *   countVowels('XYZ') => 1
  */
-function countVowels(/* str */) {
-  throw new Error('Not implemented');
+function countVowels(str) {
+  const vowels = {
+    a: 1,
+    e: 1,
+    i: 1,
+    o: 1,
+    u: 1,
+    y: 1,
+    A: 1,
+    E: 1,
+    I: 1,
+    O: 1,
+    U: 1,
+    Y: 1,
+  };
+
+  return str.split('').reduce((sum, letter) => {
+    if (letter in vowels) {
+      return sum + 1;
+    }
+
+    return sum;
+  }, 0);
 }
 
 /**
@@ -318,7 +342,26 @@ function countVowels(/* str */) {
  *   isPalindrome('No lemon, no melon') => true
  */
 function isPalindrome(str) {
-  return str.split('').reverse().join() === str;
+  const strWithoutSpace = str
+    .split(' ')
+    .map((word) => {
+      const lastSymbol = word.at(-1);
+
+      if ([',', '!', '?'].includes(lastSymbol)) {
+        return word.slice(0, -1);
+      }
+
+      return word;
+    })
+    .join('')
+    .toLowerCase();
+  const middle = Math.ceil(strWithoutSpace.length / 2);
+  const strLengthOdd = Number(strWithoutSpace.length % 2 !== 0);
+  const strFirstPart = strWithoutSpace.slice(0, middle - strLengthOdd);
+  const revertStrFirstPart = strFirstPart.split('').reverse().join('');
+  const strSecondPart = strWithoutSpace.slice(middle);
+
+  return revertStrFirstPart === strSecondPart;
 }
 
 /**
