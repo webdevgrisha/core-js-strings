@@ -420,8 +420,15 @@ function reverseWords(str) {
  *   invertCase('JavaScript is Fun') => 'jAVAsCRIPT IS fUN'
  *   invertCase('12345') => '12345'
  */
-function invertCase(/* str */) {
-  throw new Error('Not implemented');
+function invertCase(str) {
+  return str
+    .split('')
+    .map((letter) =>
+      letter.toUpperCase() === letter
+        ? letter.toLowerCase()
+        : letter.toLocaleUpperCase()
+    )
+    .join('');
 }
 
 /**
@@ -451,8 +458,8 @@ function getStringFromTemplate(firstName, lastName) {
  *   extractNameFromTemplate('Hello, John Doe!') => 'John Doe'
  *   extractNameFromTemplate('Hello, Chuck Norris!') => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(value) {
+  return value.slice(7, -1);
 }
 
 /**
@@ -466,8 +473,8 @@ function extractNameFromTemplate(/* value */) {
  *   unbracketTag('<span>') => 'span'
  *   unbracketTag('<a>') => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  return str.match(/\w+/);
 }
 
 /**
@@ -485,8 +492,12 @@ function unbracketTag(/* str */) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  // first way
+  // return str.match(/[^;]+?@.+?com/g);
+
+  // second way
+  return str.split(';');
 }
 
 /**
@@ -502,11 +513,38 @@ function extractEmails(/* str */) {
  *   'Why did the chicken cross the road?' => 'Jul qvq gur puvpxra pebff gur ebnq?'
  *   'Gb trg gb gur bgure fvqr!' => 'To get to the other side!'
  *   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
- *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
+ *   'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  console.log(str);
+
+  return str
+    .split('')
+    .map((symbol) => {
+      console.log(symbol);
+      const symbolCode = symbol.codePointAt(0);
+      const isSpecialSymbol =
+        symbolCode < 40 ||
+        (symbolCode > 90 && symbolCode < 97) ||
+        symbolCode > 122;
+      if (isSpecialSymbol) return symbol;
+
+      const isUpperCase = symbol.toUpperCase() === symbol;
+
+      let codeLetter = null;
+
+      if (isUpperCase) {
+        codeLetter = (symbolCode + 13 + 90) % 90;
+      } else {
+        codeLetter = (symbolCode + 13 + 122) % 122;
+      }
+
+      console.log(String.fromCodePoint(codeLetter));
+
+      return String.fromCodePoint(codeLetter);
+    })
+    .join('');
 }
 
 /**
@@ -533,8 +571,31 @@ function encodeToRot13(/* str */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const suit = ['♣', '♦', '♥', '♠'];
+  const cardsValues = [
+    'A',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    'J',
+    'Q',
+    'K',
+  ];
+
+  const cardValue = value.slice(0, -1);
+  const cardSuit = value.at(-1);
+
+  const cardSuitIndex = suit.indexOf(cardSuit);
+  const cardValueIndex = cardsValues.indexOf(cardValue);
+
+  return 13 * cardSuitIndex + cardValueIndex;
 }
 
 module.exports = {
