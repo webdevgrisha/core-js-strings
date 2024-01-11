@@ -517,34 +517,11 @@ function extractEmails(str) {
  *
  */
 function encodeToRot13(str) {
-  console.log(str);
-
-  return str
-    .split('')
-    .map((symbol) => {
-      console.log(symbol);
-      const symbolCode = symbol.codePointAt(0);
-      const isSpecialSymbol =
-        symbolCode < 40 ||
-        (symbolCode > 90 && symbolCode < 97) ||
-        symbolCode > 122;
-      if (isSpecialSymbol) return symbol;
-
-      const isUpperCase = symbol.toUpperCase() === symbol;
-
-      let codeLetter = null;
-
-      if (isUpperCase) {
-        codeLetter = (symbolCode + 13 + 90) % 90;
-      } else {
-        codeLetter = (symbolCode + 13 + 122) % 122;
-      }
-
-      console.log(String.fromCodePoint(codeLetter));
-
-      return String.fromCodePoint(codeLetter);
-    })
-    .join('');
+  return str.replace(/[a-z]/gi, (letter) => {
+    const letterCode = letter.charCodeAt(0);
+    const offset = letterCode >= 97 ? 97 : 65;
+    return String.fromCharCode(((letterCode - offset + 13) % 26) + offset);
+  });
 }
 
 /**
